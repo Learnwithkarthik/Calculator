@@ -1,20 +1,26 @@
-name: Maven on Docker
+name: Docker Maven Build
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      docker:
+        image: docker:latest
+        options: --privileged
+        ports:
+          - 8080:8080  # If you need to expose any ports
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Docker
-      uses: actions/setup-docker@v2
-      with:
-        dockerfile: Dockerfile  # Path to your Dockerfile if needed
+      - name: Get Maven version
+        run: |
+          docker run maven mvn --version
 
-    - name: Build and run Maven container
-      run: |
-        docker run --rm maven:latest mvn --version
