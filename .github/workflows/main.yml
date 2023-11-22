@@ -22,5 +22,4 @@ jobs:
 
       - name: Get Maven version
         run: |
-          docker run maven mvn --version
-
+          docker run maven:latest mvn --version
